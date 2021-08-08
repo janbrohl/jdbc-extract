@@ -66,12 +66,14 @@ public class Extract {
 						insert.setObject(i, obj);
 					}
 					insert.addBatch();
+					rowsLeft--;
 					if (rowsLeft <= 0) {
 						insert.executeBatch();
 						rowsLeft = batchSize;
-					} else {
-						rowsLeft--;
 					}
+				}
+				if (rowsLeft != batchSize) {
+					insert.executeBatch();
 				}
 			}
 			dst.commit();
